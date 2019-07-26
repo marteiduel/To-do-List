@@ -1,9 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import axios from "axios";
 
 import TodoItem from "./todoItem";
 
 import "./styles.css";
+import { parseConfigFileTextToJson } from "typescript";
 
 class App extends React.Component {
   constructor() {
@@ -14,14 +16,22 @@ class App extends React.Component {
       todos: []
     };
   }
+  
+  componentDidMount() {
+    fetch("http://localhost:5000/todos")
+      .then(response => response.json())
+      .then(data => this.setState({ todos: data }));
+  }
 
   renderTodos = () => {
-    return this.state.todos.map((todo, index) => {
-      return <TodoItem title={todo} key={index} />;
+    return this.state.todos.map(todo => {
+      return (
+        <TodoItem key={todo.id} todoItem={todo} deleteItem={this.deleteItem} />
+      );
     });
   };
 
-  handleChange = () => {
+  handleChange = event => {
     this.setState({
       todo: event.target.value
     });
@@ -30,10 +40,34 @@ class App extends React.Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    this.setState({
-      todos: [...this.state.todos, this.state.todo],
-      todo: ""
-    });
+    axios({
+      method: "post",
+      url: "http://localhost:5000/add-todo",
+      headers: { "content-type": "application/json" },
+      data: {
+        title: this.state.todo,
+        done: false
+      }
+    })
+      .then(data => {
+        this.setState({
+          todos: [...this.state.todos, data.data],
+          todo: ""
+        });
+      })
+      .catch(error => console.log(error));
+  };
+
+  deleteItem = id => {
+    fetch(`http://localhost:5000/todo/${id}`, {
+      method: "DELETE"
+    }).then(
+      this.setState({
+        todos: this.state.todos.filter(item => {
+          return item.id !== id;
+        })
+      })
+    );
   };
 
   render() {
