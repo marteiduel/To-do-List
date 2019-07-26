@@ -42,7 +42,7 @@ class App extends React.Component {
     event.preventDefault();
     axios({
       method: "post",
-      url: "https://marteitodolist.herokuapp.comadd-todo",
+      url: "https://marteitodolist.herokuapp.com/add-todo",
       headers: { "content-type": "application/json" },
       data: {
         title: this.state.todo,
