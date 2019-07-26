@@ -19,7 +19,7 @@ class TodoItem extends React.Component {
         },
         body: JSON.stringify({
           title: this.props.todoItem.title,
-          done: !this.state.done
+          done: this.state.done
         })
       }
     )
@@ -40,7 +40,7 @@ class TodoItem extends React.Component {
           defaultChecked={this.state.done}
         />
         <p className={this.state.done ? "done" : null}>
-          {this.props.todoItem.title}{" "}
+          {this.props.todoItem.title}
         </p>
         <button onClick={() => this.props.deleteItem(this.props.todoItem.id)}>
           Delete
