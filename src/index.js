@@ -16,9 +16,9 @@ class App extends React.Component {
       todos: []
     };
   }
-  
+
   componentDidMount() {
-    fetch("http://localhost:5000/todos")
+    fetch("https://marteitodolist.herokuapp.com/todos")
       .then(response => response.json())
       .then(data => this.setState({ todos: data }));
   }
@@ -42,7 +42,7 @@ class App extends React.Component {
     event.preventDefault();
     axios({
       method: "post",
-      url: "http://localhost:5000/add-todo",
+      url: "https://marteitodolist.herokuapp.comadd-todo",
       headers: { "content-type": "application/json" },
       data: {
         title: this.state.todo,
@@ -59,7 +59,7 @@ class App extends React.Component {
   };
 
   deleteItem = id => {
-    fetch(`http://localhost:5000/todo/${id}`, {
+    fetch(`https://marteitodolist.herokuapp.com/todo/${id}`, {
       method: "DELETE"
     }).then(
       this.setState({
